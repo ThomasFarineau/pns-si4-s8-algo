@@ -1,4 +1,6 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, Response
+import json
+
 
 app = Flask(__name__)
 port = 5000
@@ -39,7 +41,7 @@ def check_format(b):
 
 
 def send_detail(detail, status):
-    return jsonify({'detail': detail}), status
+    return Response(json.dumps({'detail': detail}, ensure_ascii=False), status=status, mimetype='application/json')
 
 
 def parse_board(b):
