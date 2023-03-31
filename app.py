@@ -12,7 +12,7 @@ def move():
     if not is_valid(b):
         return send_detail('Paramètre b invalide', 400)
     # TODO: effectuer les opérations nécessaires avec le paramètre b
-    print(parse_board(b))
+    print_board(parse_board(b))
     result = {'message': 'Opération effectuée avec succès'}
     return jsonify(result)
 
@@ -43,6 +43,23 @@ def parse_board(b):
         col.reverse()
         board.append(col)
     return board
+
+
+def print_board(board):
+    # print the board in a nice way
+    # add indicators for columns
+    print('•\t0\t1\t2\t3\t4\t5\t6', end='\n')
+    for i in range(6):
+        # add indicators for columns
+        print(i, end='\t')
+        for j in range(7):
+            # add indicators for rows
+            # replace None with •
+            if board[j][i] is None:
+                print('•', end='\t')
+            else:
+                print(board[j][i], end='\t')
+        print()
 
 
 if __name__ == '__main__':
