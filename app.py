@@ -1,4 +1,7 @@
-from flask import Flask, request, jsonify
+import json
+
+from flask import Flask, request, Response
+import algo
 
 app = Flask(__name__)
 port = 5000
@@ -15,9 +18,8 @@ def move():
     # TODO: effectuer les opérations nécessaires avec le paramètre b
     board = parse_board(b)
     print(board)
-    result = {'message': 'Opération effectuée avec succès'}
-    print(score(board))
-    return jsonify(result)
+    print(algo.score(board))
+    return send_detail("Opération effectuée avec succès", 200)
 
 
 def check_format(b):
@@ -41,7 +43,7 @@ def check_format(b):
 
 
 def send_detail(detail, status):
-    return jsonify({'detail': detail}), status
+    return Response(json.dumps({'detail': detail}, ensure_ascii=False), status=status, mimetype='application/json')
 
 
 def parse_board(b):
