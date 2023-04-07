@@ -1,55 +1,90 @@
-import math
-import random
-score_heuristics = [[2, 2, 2, 2, 2, 2], [3, 4, 5, 5, 4, 3], [4, 6, 8, 8, 6, 4], [6, 8, 10, 10, 8, 6], [4, 6, 8, 8, 6, 4], [3, 4, 5, 5, 4, 3], [2, 2, 2, 2, 2, 2]]
-grid = ""
-currentPlayer = ""
-time = ""
+let grid;
+let currentPlayer;
+let time;
+const position_heuristics = [[2, 2, 2, 2, 2, 2], [3, 4, 5, 5, 4, 3], [4, 6, 8, 8, 6, 4], [6, 8, 10, 10, 8, 6], [4, 6, 8, 8, 6, 4], [3, 4, 5, 5, 4, 3], [2, 2, 2, 2, 2, 2]];
 
+function setup(AIplays){
+    currentPlayer = AIplays;
+    grid = new Array(7)
+    for (let i = 0; i < 7; i++) {
+        grid[i] = new Array(6)
+        for (let j = 0; j < 6; j++) {
+            grid[i][j] = 0;
+        }
+    }
+    return true;
+}
 
-def score(board):
-    score = 0
-    for i in range(0,7):
-        for j in range(0,6):
-            if (board[i][j] == 'm'):
-                # print("+", score_heuristics[i][j])
-                score += score_heuristics[i][j]
-            elif (board[i][j] == 'h'):
-                # print("-", score_heuristics[i][j])
-                score -= score_heuristics[i][j]
-    return score
+function playFromServer(col, row, player) {
+    play(grid, col, row, player);
+}
 
+function getGrid() {
+    return grid;
+}
 
+function play(gr, col, row, player) {
 
+    let n = gr[col].filter(e => e === 0).length;
 
-def next_move(last_move):
-    #time = perfomance.now();
-    play(grid, last_move[0], last_move[1], currentPlayer)
-    if (last_move.length != 0):
-        if (currentPlayer == 'm'):
-            currentPlayer = 'h'
-        elif (currentPlayer == 'h'):
-            currentPlayer = 'm'
-    ret = 0
-    finalRet = 0
-    depth = 1
-    while(depth <= 42):  # time should be checked
-        finalRet = ret
-        ret = minimax(grid, currentPlayer, -100000, 100000, currentPlayer)[1]
-        depth += 1
-    if (finalRet[0] == -1 and finalRet[1] == -1):
-        finalRet = playableMoves(grid)[random.randint(0, 7)]
+    if (n > 0) {
+        gr[col][6 - n] = player;
+        return true;
+    }
+    return false;
+}
 
+function playableMoves(gameState) {
+    let ret = []
+    for (let i = 0; i < 7; i++) {
+        for (let j = 0; j < 6; j++) {
+            if (gameState[i][j] === 0) {
+                let arr = new Array(2);
+                arr = [i,j]
+                ret.push(arr);
+                break;
+            }
+        }
+    }
+    return ret;
+}
 
-def play(gr, col, row, player):
+function nextMove(lastMove) {
+    //console.log(lastMove)
+    return new Promise(function (resolve, reject) {
+        time = performance.now()
+        if (lastMove.length !== 0) {
+            play(grid, lastMove[0], lastMove[1], currentPlayer);
+            if (currentPlayer === 1) {
+                currentPlayer = 2;
+            } else if (currentPlayer === 2) {
+                currentPlayer = 1;
+            }
+        }
+        let ret;
+        let finalRet;
+        let depth = 1;
+        while (performance.now() - time < 95 && depth <= 42) {
+            finalRet = ret;
+            ret = minimax(grid, currentPlayer, depth, -Number.MAX_VALUE, Number.MAX_VALUE)[1];
+            depth++;
+        }
+        if(finalRet[0] === -1 && finalRet[1] === -1){
+            finalRet = playableMoves(grid)[Math.floor(Math.random() * 7)];
+        }
+        play(grid, finalRet[0], finalRet[1], currentPlayer);
 
-    n = gr[col].filter(e => e === 0).length
+        if (currentPlayer === 1) {
+            currentPlayer = 2;
+        } else if (currentPlayer === 2) {
+            currentPlayer = 1;
+        }
+        resolve(finalRet);
+    });
 
-    if (n > 0):
-        gr[col][6 - n] = player
-        return True
+}
 
-
-def minimax(gameState, player, depth, alpha, beta) {
+function minimax(gameState, player, depth, alpha, beta) {
     if (performance.now() - time > 98) {
         let val;
         if (player === 1) {
@@ -270,3 +305,4 @@ def minimax(gameState, player, depth, alpha, beta) {
         }
         return ret;
     }
+}
