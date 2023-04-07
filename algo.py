@@ -1,11 +1,14 @@
 import math
 import random
-score_heuristics = [[2, 2, 2, 2, 2, 2], [3, 4, 5, 5, 4, 3], [4, 6, 8, 8, 6, 4], [6, 8, 10, 10, 8, 6], [4, 6, 8, 8, 6, 4], [3, 4, 5, 5, 4, 3], [2, 2, 2, 2, 2, 2]]
+
+score_heuristics = [[2, 2, 2, 2, 2, 2], [3, 4, 5, 5, 4, 3], [4, 6, 8, 8, 6, 4], [6, 8, 10, 10, 8, 6],
+                    [4, 6, 8, 8, 6, 4], [3, 4, 5, 5, 4, 3], [2, 2, 2, 2, 2, 2]]
 grid = ""
 currentPlayer = ""
 time = 2
 MIN_VALUE = -100000
 MAX_VALUE = 100000
+
 
 def next_move(last_move):
     # time = perfomance.now()
@@ -22,7 +25,7 @@ def next_move(last_move):
         finalRet = ret
         ret = minimax(grid, currentPlayer, depth, MIN_VALUE, MAX_VALUE)[1]
         depth += 1
-    if (finalRet[0] == -1 )and (finalRet[1] == -1):
+    if (finalRet[0] == -1) and (finalRet[1] == -1):
         finalRet = playableMoves(grid)[random.randint(0, 7)]
     play(grid, finalRet[0], finalRet[1], currentPlayer)
 
@@ -34,8 +37,10 @@ def next_move(last_move):
 
 
 def play(gr, col, row, player):
-
-    n = len([e for e in gr[col] if e === 0])
+    n = 0
+    for e in gr[col]:
+        if e == 0:
+            n += 1
 
     if n > 0:
         gr[col][6 - n] = player
@@ -63,9 +68,9 @@ def minimax(gameState, player, depth, alpha, beta):
         for element in allMoves:
             currentMove = element
             newGameState = []
-            for j in range (7):
+            for j in range(7):
                 c = []
-                for k in range (6):
+                for k in range(6):
                     c[k] = (gameState[j][k] * 1)
                 newGameState[j] = c
             play(newGameState, currentMove[0], currentMove[1], 1)
@@ -83,9 +88,9 @@ def minimax(gameState, player, depth, alpha, beta):
         for element in allMoves:
             currentMove = element
             newGameState = []
-            for j in range (7):
+            for j in range(7):
                 c = []
-                for k in range (6):
+                for k in range(6):
                     c[k] = (gameState[j][k] * 1)
                 newGameState[j] = c
             play(newGameState, currentMove[0], currentMove[1], 2)
@@ -122,10 +127,11 @@ def ScoreHeuristic(HumanInRow, ComputerInRow, p1Tokens, p2Tokens):
         points -= 20 + 5 * p1Tokens
     return points
 
+
 def applyPoints(gameState):
     score = 0
-    for i in range(0,7):
-        for j in range(0,6):
+    for i in range(0, 7):
+        for j in range(0, 6):
             if gameState[i][j] == 'm':
                 # print("+", score_heuristics[i][j])
                 score += score_heuristics[i][j]
@@ -133,42 +139,42 @@ def applyPoints(gameState):
                 # print("-", score_heuristics[i][j])
                 score -= score_heuristics[i][j]
     # apply points for rows
-    for rows in range (6):
-        for column in range (7-4):
+    for rows in range(6):
+        for column in range(7 - 4):
             p1InRow = 0
             p2InRow = 0
             p1Tokens = 0
             p2Tokens = 0
-            for offset in range (column, column + 4):
+            for offset in range(column, column + 4):
                 if gameState[offset][rows] == 1:
-                    p1InRow+=1
+                    p1InRow += 1
                     p2InRow = 0
-                    p1Tokens+=1
+                    p1Tokens += 1
                 elif gameState[offset][rows] == 2:
-                    p2InRow+=1
+                    p2InRow += 1
                     p1InRow = 0
-                    p2Tokens+=1
+                    p2Tokens += 1
 
             score += ScoreHeuristic(p1InRow, p2InRow, p1Tokens, p2Tokens)
             if score <= -1000 or score >= 1000:
                 return score
 
     # apply points for columns
-    for column in range (7):
-        for rows in range (6-4):
+    for column in range(7):
+        for rows in range(6 - 4):
             p1InRow = 0
             p2InRow = 0
             p1Tokens = 0
             p2Tokens = 0
-            for offset in range (rows, rows + 4):
+            for offset in range(rows, rows + 4):
                 if gameState[column][offset] == 1:
-                    p1InRow+=1
+                    p1InRow += 1
                     p2InRow = 0
-                    p1Tokens+=1
+                    p1Tokens += 1
                 elif gameState[column][offset] == 2:
-                    p2InRow+=1
+                    p2InRow += 1
                     p1InRow = 0
-                    p2Tokens+=1
+                    p2Tokens += 1
 
             score += ScoreHeuristic(p1InRow, p2InRow, p1Tokens, p2Tokens)
             if score <= -1000 or score >= 1000:
@@ -182,7 +188,7 @@ def applyPoints(gameState):
             p1Tokens = 0
             p2Tokens = 0
             for offset in range(rows, rows + 4):
-                if gameState[column +(offset - rows)][offset] == 1:
+                if gameState[column + (offset - rows)][offset] == 1:
                     p1InRow += 1
                     p2InRow = 0
                     p1Tokens += 1
@@ -196,7 +202,7 @@ def applyPoints(gameState):
                 return score
 
     # apply points for anti diag
-    for column in reversed(range(7 - 1 , 7 -4)):
+    for column in reversed(range(7 - 1, 7 - 4)):
         for rows in range(6 - 4):
             p1InRow = 0
             p2InRow = 0
@@ -217,11 +223,12 @@ def applyPoints(gameState):
                 return score
     return score
 
+
 def playableMoves(gameState):
     ret = []
     for i in range(7):
         for j in range(6):
             if (gameState[i][j] == None):
-                ret.append([i,j])
+                ret.append([i, j])
                 break
     return ret
