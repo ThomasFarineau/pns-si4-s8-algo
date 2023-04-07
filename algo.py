@@ -258,15 +258,11 @@ def minimax(gameState, player, depth, alpha, beta) {
         return score;
     }
 
-    function playableMoves(gameState) {
-        let ret = []
-        for (let i = 0; i < 7; i++) {
-            for (let j = 0; j < 6; j++) {
-                if (gameState[i][j] === 0) {
-                    ret.push([i, j]);
-                    break;
-                }
-            }
-        }
-        return ret;
-    }
+def playableMoves(gameState):
+    let ret = []
+    for i in range(7):
+        for j in range(6):
+            if (gameState[i][j] == None):
+                ret.append([i,j])
+                break
+    return ret
