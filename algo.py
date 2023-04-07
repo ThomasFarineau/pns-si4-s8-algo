@@ -99,40 +99,28 @@ def minimax(gameState, player, depth, alpha, beta):
         return [minVal, moveToPlay]
 
 
-    function ScoreHeuristic(HumanInRow, ComputerInRow, p1Tokens, p2Tokens) {
-        let points = 0;
-        switch (HumanInRow) {
-            case 4:
-                points += 100000;
-                break;
-            case 3:
-                if (p2Tokens === 0) {
-                    points += 80;
-                } else {
-                    points += 40;
-                }
-                break;
-            case 2:
-                points += 20 - 5 * p2Tokens;
-                break;
-        }
-        switch (ComputerInRow) {
-            case 4:
-                points -= 100000;
-                break;
-            case 3:
-                if (p1Tokens === 0) {
-                    points -= 80;
-                } else {
-                    points -= 40;
-                }
-                break;
-            case 2:
-                points -= 20 + 5 * p1Tokens;
-                break;
-        }
-        return points;
-    }
+def ScoreHeuristic(HumanInRow, ComputerInRow, p1Tokens, p2Tokens):
+    points = 0
+    if HumanInRow == 4:
+        points += 100000
+    elif HumanInRow == 3:
+        if p2Tokens == 0:
+            points += 80
+        else:
+            points += 40
+    elif HumanInRow == 2:
+        points += 20 - 5 * p2Tokens
+
+    if ComputerInRow == 4:
+        points -= 100000
+    elif ComputerInRow == 3:
+        if p1Tokens == 0:
+            points -= 80
+        else:
+            points -= 40
+    elif ComputerInRow == 2:
+        points -= 20 + 5 * p1Tokens
+    return points
 
 def applyPoints(gameState):
     score = 0
