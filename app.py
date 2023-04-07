@@ -1,16 +1,11 @@
-import json
+import http.server
+import urllib.parse
 
-from flask import Flask, request, Response
-from format import Format, print_board
+from format import print_board, Format
 from verification import Verification
 
-app = Flask(__name__)
-port = 5000
 
-
-@app.route('/move', methods=['GET'])
-def move():
-    b = request.args.get('b')
+def move(b):
     f = Format(b)
     if not f.is_valid():
         return send_detail(f.message, 400)
@@ -27,8 +22,32 @@ def move():
 
 
 def send_detail(detail, status):
-    return Response(json.dumps({'detail': detail}, ensure_ascii=False), status=status, mimetype='application/json')
+    return [status, {'detail': detail}, 'application/json']
 
+
+class ServerHandler(http.server.BaseHTTPRequestHandler):
+    def do_GET(self):
+        parsed_path = urllib.parse.urlparse(self.path)
+        query_params = urllib.parse.parse_qs(parsed_path.query)
+        if parsed_path.path == '/move' and 'b' in query_params:
+            m = move(query_params['b'][0])
+            print(m)
+            # Traiter la requête ici
+            self.send_response(m[0])
+            self.send_header('Content-type', m[2])
+            self.end_headers()
+            self.wfile.write(bytes(m[1]['detail'], 'utf-8'))
+        else:
+            # Renvoyer une réponse 404 Not Found pour toute autre requête
+            self.send_response(404)
+            self.send_header('Content-type', 'text/plain')
+            self.end_headers()
+            self.wfile.write(b'404 Not Found')
+
+
+server_address = ('', 8000)
+httpd = http.server.HTTPServer(server_address, ServerHandler)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=port)
+    print('Serveur en écoute sur le port 8000...')
+    httpd.serve_forever()
