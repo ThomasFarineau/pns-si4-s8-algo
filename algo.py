@@ -5,22 +5,6 @@ grid = ""
 currentPlayer = ""
 time = ""
 
-
-def score(board):
-    score = 0
-    for i in range(0,7):
-        for j in range(0,6):
-            if (board[i][j] == 'm'):
-                # print("+", score_heuristics[i][j])
-                score += score_heuristics[i][j]
-            elif (board[i][j] == 'h'):
-                # print("-", score_heuristics[i][j])
-                score -= score_heuristics[i][j]
-    return score
-
-
-
-
 def next_move(last_move):
     #time = perfomance.now();
     play(grid, last_move[0], last_move[1], currentPlayer)
@@ -157,106 +141,103 @@ def minimax(gameState, player, depth, alpha, beta) {
         return points;
     }
 
-    function applyPoints(gameState) {
-        let score = 0;
-        for (let i = 0; i < 7; i++) {
-            for (let j = 0; j < 6; j++) {
-                if (gameState[i][j] === 1) {
-                    score += position_heuristics[i][j];
-                }
-                if (gameState[i][j] === 2) {
-                    score -= position_heuristics[i][j];
-                }
-            }
-        }
-        //apply points for rows
-        for (let rows = 0; rows < 6; rows++) {
-            for (let column = 0; column <= 7 - 4; column++) {
-                let p1InRow = 0, p2InRow = 0, p1Tokens = 0, p2Tokens = 0;
-                for (let offset = column; offset < column + 4; offset++) {
-                    if (gameState[offset][rows] === 1) {
-                        p1InRow++;
-                        p2InRow = 0;
-                        p1Tokens++;
-                    } else if (gameState[offset][rows] === 2) {
-                        p2InRow++;
-                        p1InRow = 0;
-                        p2Tokens++;
-                    }
-                }
-
-                score += ScoreHeuristic(p1InRow, p2InRow, p1Tokens, p2Tokens);
-                if (score <= -1000 || score >= 1000) return score;
-            }
-        }
-
-        //apply points for columns
-        for (let column = 0; column < 7; column++) {
-            for (let rows = 0; rows <= 6 - 4; rows++) {
-                let p1InRow = 0, p1Tokens = 0, p2Tokens = 0;
-                let p2InRow = 0;
-
-                for (let offset = rows; offset < rows + 4; offset++) {
-                    if (gameState[column][offset] === 1) {
-                        p1InRow++;
-                        p2InRow = 0;
-                        p1Tokens++;
-                    } else if (gameState[column][offset] === 2) {
-                        p2InRow++;
-                        p1InRow = 0;
-                        p2Tokens++;
-                    }
-                }
-
-                score += ScoreHeuristic(p1InRow, p2InRow, p1Tokens, p2Tokens);
-                if (score <= -1000 || score >= 1000) return score;
-            }
-        }
-
-        //apply points for diag
+def applyPoints(gameState):
+    score = 0
+    for i in range(0,7):
+        for j in range(0,6):
+            if (board[i][j] == 'm'):
+                # print("+", score_heuristics[i][j])
+                score += score_heuristics[i][j]
+            elif (board[i][j] == 'h'):
+                # print("-", score_heuristics[i][j])
+                score -= score_heuristics[i][j]
+    //apply points for rows
+    for (let rows = 0; rows < 6; rows++) {
         for (let column = 0; column <= 7 - 4; column++) {
-            for (let rows = 0; rows <= 6 - 4; rows++) {
-                let p1InRow = 0, p1Tokens = 0, p2Tokens = 0;
-                let p2InRow = 0;
-                for (let offset = rows; offset < rows + 4; offset++) {
-                    if (gameState[column + (offset - rows)][offset] === 1) {
-                        p1InRow++;
-                        p2InRow = 0;
-                        p1Tokens++;
-                    } else if (gameState[column + (offset - rows)][offset] === 2) {
-                        p2InRow++;
-                        p1InRow = 0;
-                        p2Tokens++;
-                    }
+            let p1InRow = 0, p2InRow = 0, p1Tokens = 0, p2Tokens = 0;
+            for (let offset = column; offset < column + 4; offset++) {
+                if (gameState[offset][rows] === 1) {
+                    p1InRow++;
+                    p2InRow = 0;
+                    p1Tokens++;
+                } else if (gameState[offset][rows] === 2) {
+                    p2InRow++;
+                    p1InRow = 0;
+                    p2Tokens++;
                 }
-                score += ScoreHeuristic(p1InRow, p2InRow, p1Tokens, p2Tokens);
-                if (score <= -1000 || score >= 1000) return score;
             }
-        }
 
-
-        //apply points for anti diag
-        for (let column = 7 - 1; column >= 7 - 4; column--) {
-            for (let rows = 0; rows <= 6 - 4; rows++) {
-                let p1InRow = 0, p1Tokens = 0, p2Tokens = 0;
-                let p2InRow = 0;
-                for (let offset = rows; offset < rows + 4; offset++) {
-                    if (gameState[column - (offset - rows)][offset] === 1) {
-                        p1InRow++;
-                        p2InRow = 0;
-                        p1Tokens++;
-                    } else if (gameState[column - (offset - rows)][offset] === 2) {
-                        p2InRow++;
-                        p1InRow = 0;
-                        p2Tokens++;
-                    }
-                }
-                score += ScoreHeuristic(p1InRow, p2InRow, p1Tokens, p2Tokens);
-                if (score <= -1000 || score >= 1000) return score;
-            }
+            score += ScoreHeuristic(p1InRow, p2InRow, p1Tokens, p2Tokens);
+            if (score <= -1000 || score >= 1000) return score;
         }
-        return score;
     }
+
+    //apply points for columns
+    for (let column = 0; column < 7; column++) {
+        for (let rows = 0; rows <= 6 - 4; rows++) {
+            let p1InRow = 0, p1Tokens = 0, p2Tokens = 0;
+            let p2InRow = 0;
+
+            for (let offset = rows; offset < rows + 4; offset++) {
+                if (gameState[column][offset] === 1) {
+                    p1InRow++;
+                    p2InRow = 0;
+                    p1Tokens++;
+                } else if (gameState[column][offset] === 2) {
+                    p2InRow++;
+                    p1InRow = 0;
+                    p2Tokens++;
+                }
+            }
+
+            score += ScoreHeuristic(p1InRow, p2InRow, p1Tokens, p2Tokens);
+            if (score <= -1000 || score >= 1000) return score;
+        }
+    }
+
+    //apply points for diag
+    for (let column = 0; column <= 7 - 4; column++) {
+        for (let rows = 0; rows <= 6 - 4; rows++) {
+            let p1InRow = 0, p1Tokens = 0, p2Tokens = 0;
+            let p2InRow = 0;
+            for (let offset = rows; offset < rows + 4; offset++) {
+                if (gameState[column + (offset - rows)][offset] === 1) {
+                    p1InRow++;
+                    p2InRow = 0;
+                    p1Tokens++;
+                } else if (gameState[column + (offset - rows)][offset] === 2) {
+                    p2InRow++;
+                    p1InRow = 0;
+                    p2Tokens++;
+                }
+            }
+            score += ScoreHeuristic(p1InRow, p2InRow, p1Tokens, p2Tokens);
+            if (score <= -1000 || score >= 1000) return score;
+        }
+    }
+
+
+    //apply points for anti diag
+    for (let column = 7 - 1; column >= 7 - 4; column--) {
+        for (let rows = 0; rows <= 6 - 4; rows++) {
+            let p1InRow = 0, p1Tokens = 0, p2Tokens = 0;
+            let p2InRow = 0;
+            for (let offset = rows; offset < rows + 4; offset++) {
+                if (gameState[column - (offset - rows)][offset] === 1) {
+                    p1InRow++;
+                    p2InRow = 0;
+                    p1Tokens++;
+                } else if (gameState[column - (offset - rows)][offset] === 2) {
+                    p2InRow++;
+                    p1InRow = 0;
+                    p2Tokens++;
+                }
+            }
+            score += ScoreHeuristic(p1InRow, p2InRow, p1Tokens, p2Tokens);
+            if (score <= -1000 || score >= 1000) return score;
+        }
+    }
+    return score
 
 def playableMoves(gameState):
     let ret = []
