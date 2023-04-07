@@ -35,7 +35,7 @@ def next_move(last_move):
 
 def play(gr, col, row, player):
 
-    n = gr[col].filter(e => e === 0).length
+    n = len([e for e in gr[col] if e === 0])
 
     if n > 0:
         gr[col][6 - n] = player
@@ -60,55 +60,43 @@ def minimax(gameState, player, depth, alpha, beta):
     if player == 1:
         moveToPlay = [-1, -1]
         maxVal = MIN_VALUE
-        for (const element of allMoves) {
-            let currentMove = element;
-            let newGameState = new Array(7);
-            for (let j = 0; j < 7; j++) {
-                let c = new Array(6);
-                for (let k = 0; k < 6; k++) {
-                    c[k] = (gameState[j][k] * 1);
-                }
-                newGameState[j] = c;
-            }
-            play(newGameState, currentMove[0], currentMove[1], 1);
-            let val = minimax(newGameState, 2, depth - 1, alpha, beta)[0];
-            if (val > maxVal) {
-                maxVal = val;
-                moveToPlay = currentMove;
-            }
-            alpha = Math.max(alpha, val);
-            if (beta <= alpha) {
-                break;
-            }
-        }
+        for element in allMoves:
+            currentMove = element
+            newGameState = []
+            for j in range (7):
+                c = []
+                for k in range (6):
+                    c[k] = (gameState[j][k] * 1)
+                newGameState[j] = c
+            play(newGameState, currentMove[0], currentMove[1], 1)
+            val = minimax(newGameState, 2, depth - 1, alpha, beta)[0]
+            if val > maxVal:
+                maxVal = val
+                moveToPlay = currentMove
+            alpha = max(alpha, val)
+            if beta <= alpha:
+                break
         return [maxVal, moveToPlay]
-    }
-    if (player === 2) {
-        let moveToPlay = [-1, -1]
-        let minVal = Number.MAX_VALUE;
-        for (const element of allMoves) {
-            let currentMove = element;
-            let newGameState = new Array(7);
-            for (let j = 0; j < 7; j++) {
-                let c = new Array(6);
-                for (let k = 0; k < 6; k++) {
-                    c[k] = (gameState[j][k] * 1);
-                }
-                newGameState[j] = c;
-            }
-            play(newGameState, currentMove[0], currentMove[1], 2);
-            let val = minimax(newGameState, 1, depth - 1, alpha, beta)[0]
-            if (val < minVal) {
+    if player == 2:
+        moveToPlay = [-1, -1]
+        minVal = MAX_VALUE
+        for element in allMoves:
+            currentMove = element
+            newGameState = []
+            for j in range (7):
+                c = []
+                for k in range (6):
+                    c[k] = (gameState[j][k] * 1)
+                newGameState[j] = c
+            play(newGameState, currentMove[0], currentMove[1], 2)
+            val = minimax(newGameState, 1, depth - 1, alpha, beta)[0]
+            if val < minVal:
                 minVal = val
-                moveToPlay = currentMove;
-            }
-            beta = Math.min(beta, val);
-            if (beta <= alpha) {
-                break;
-            }
-        }
+                moveToPlay = currentMove
+            beta = min(beta, val)
+            if beta <= alpha:
+                break
         return [minVal, moveToPlay]
-    }
 
 
     function ScoreHeuristic(HumanInRow, ComputerInRow, p1Tokens, p2Tokens) {
