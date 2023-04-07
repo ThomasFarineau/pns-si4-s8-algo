@@ -3,58 +3,63 @@ import random
 score_heuristics = [[2, 2, 2, 2, 2, 2], [3, 4, 5, 5, 4, 3], [4, 6, 8, 8, 6, 4], [6, 8, 10, 10, 8, 6], [4, 6, 8, 8, 6, 4], [3, 4, 5, 5, 4, 3], [2, 2, 2, 2, 2, 2]]
 grid = ""
 currentPlayer = ""
-time = ""
+time = 2
+MIN_VALUE = -100000
+MAX_VALUE = 100000
 
 def next_move(last_move):
-    #time = perfomance.now();
+    # time = perfomance.now()
     play(grid, last_move[0], last_move[1], currentPlayer)
-    if (last_move.length != 0):
-        if (currentPlayer == 'm'):
+    if last_move.length != 0:
+        if currentPlayer == 'm':
             currentPlayer = 'h'
-        elif (currentPlayer == 'h'):
+        elif currentPlayer == 'h':
             currentPlayer = 'm'
     ret = 0
     finalRet = 0
     depth = 1
-    while(depth <= 42):  # time should be checked
+    while depth <= 42:  # time should be checked
         finalRet = ret
-        ret = minimax(grid, currentPlayer, -100000, 100000, currentPlayer)[1]
+        ret = minimax(grid, currentPlayer, depth, MIN_VALUE, MAX_VALUE)[1]
         depth += 1
-    if (finalRet[0] == -1 and finalRet[1] == -1):
+    if (finalRet[0] == -1 )and (finalRet[1] == -1):
         finalRet = playableMoves(grid)[random.randint(0, 7)]
+    play(grid, finalRet[0], finalRet[1], currentPlayer)
+
+    if currentPlayer == 1:
+        currentPlayer = 2
+    elif currentPlayer == 2:
+        currentPlayer = 1
+    return finalRet
 
 
 def play(gr, col, row, player):
 
     n = gr[col].filter(e => e === 0).length
 
-    if (n > 0):
+    if n > 0:
         gr[col][6 - n] = player
         return True
 
 
-def minimax(gameState, player, depth, alpha, beta) {
-    if (performance.now() - time > 98) {
-        let val;
-        if (player === 1) {
-            val = -Number.MAX_VALUE;
-        }
-        if (player === 2) {
-            val = Number.MAX_VALUE;
-        }
+def minimax(gameState, player, depth, alpha, beta):
+    if (100 - time) > 98:
+        val = 0
+        if player == 1:
+            val = MIN_VALUE
+        if player == 2:
+            val = MAX_VALUE
         return [val, [-1, -1]]
-    }
 
-    let allMoves = playableMoves(gameState);
-    let score = applyPoints(gameState);
+    allMoves = playableMoves(gameState)
+    score = applyPoints(gameState)
 
-    if (depth === 0 || score <= -1000 || score >= 1000 || allMoves.length === 0) {
-        return [score, [-1, -1]];
-    }
+    if depth == 0 or score <= -1000 or score >= 1000 or allMoves.length == 0:
+        return [score, [-1, -1]]
 
-    if (player === 1) {
-        let moveToPlay = [-1, -1]
-        let maxVal = -Number.MAX_VALUE;
+    if player == 1:
+        moveToPlay = [-1, -1]
+        maxVal = MIN_VALUE
         for (const element of allMoves) {
             let currentMove = element;
             let newGameState = new Array(7);
