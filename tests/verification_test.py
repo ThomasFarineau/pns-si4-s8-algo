@@ -1,7 +1,6 @@
 import unittest
 
-import format
-import verification
+from src import format, verification
 
 
 class VerificationTest(unittest.TestCase):

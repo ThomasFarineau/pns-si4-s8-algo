@@ -1,7 +1,6 @@
 import unittest
 
-import format
-
+from src import format
 
 class FormatTest(unittest.TestCase):
     def test_not_42(self):

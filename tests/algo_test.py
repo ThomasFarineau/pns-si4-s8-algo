@@ -1,7 +1,7 @@
 import unittest
-import format
-import verification
-import algo
+
+from src import verification, algo
+
 
 class AlgoTest(unittest.TestCase):
     def test_row_1(self):
