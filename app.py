@@ -1,7 +1,9 @@
 import http.server
 import urllib.parse
+import json
 
-from format import print_board, Format
+from algo import best_move
+from format import Format
 from verification import Verification
 
 
@@ -12,13 +14,7 @@ def move(b):
     v = Verification(f.formatted_board())
     if not v.is_valid():
         return send_detail(v.message, 422)
-
-    board = v.board
-    print_board(board)
-
-    # TODO: effectuer les opérations nécessaires avec le paramètre b
-    # print(algo.score(board))
-    return send_detail("Opération effectuée avec succès", 200)
+    return [200, best_move(v.board, 1), 'application/json']
 
 
 def send_detail(detail, status):
@@ -31,12 +27,12 @@ class ServerHandler(http.server.BaseHTTPRequestHandler):
         query_params = urllib.parse.parse_qs(parsed_path.query)
         if parsed_path.path == '/move' and 'b' in query_params:
             m = move(query_params['b'][0])
-            print(m)
+            json_to_send = json.dumps(m[1])
             # Traiter la requête ici
             self.send_response(m[0])
             self.send_header('Content-type', m[2])
             self.end_headers()
-            self.wfile.write(bytes(m[1]['detail'], 'utf-8'))
+            self.wfile.write(json_to_send.encode("utf-8"))
         else:
             # Renvoyer une réponse 404 Not Found pour toute autre requête
             self.send_response(404)

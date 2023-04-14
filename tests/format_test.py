@@ -3,7 +3,7 @@ import unittest
 import format
 
 
-class MyTestCase(unittest.TestCase):
+class FormatTest(unittest.TestCase):
     def test_not_42(self):
         b = "0" * 41
         f = format.Format(b)

@@ -4,7 +4,7 @@ import format
 import verification
 
 
-class MyTestCase(unittest.TestCase):
+class VerificationTest(unittest.TestCase):
     def test_connect_4_1(self):
         b = "hm0000hm0000hm0000h00000000000000000000000"
         f = format.Format(b)
