@@ -3,7 +3,7 @@ import http.server
 import json
 import urllib.parse
 
-from algo import best_move
+from algo import get_best_move
 from format import Format
 from verification import Verification
 
@@ -20,7 +20,7 @@ def main(port, time):
         v = Verification(f.formatted_board())
         if not v.is_valid():
             return send_detail(v.message, 422)
-        return [200, best_move(v.board, time), 'application/json']
+        return [200, get_best_move(v.board, time), 'application/json']
 
     class ServerHandler(http.server.BaseHTTPRequestHandler):
         def do_GET(self):
@@ -28,7 +28,7 @@ def main(port, time):
             query_params = urllib.parse.parse_qs(parsed_path.query)
             if parsed_path.path == '/move' and 'b' in query_params:
                 m = move(query_params['b'][0])
-                json_to_send = json.dumps(m[1])
+                json_to_send = json.dumps(m[1][0])
                 # Traiter la requête ici
                 self.send_response(m[0])
                 self.send_header('Content-type', m[2])

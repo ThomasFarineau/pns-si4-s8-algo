@@ -76,11 +76,13 @@ class FormatTest(unittest.TestCase):
         self.assertEqual(f.is_valid(), True)
         self.assertEqual(f.message, None)
 
+
     def test_valid_board5(self):
         b = "hmhh00hmh000mh0000hm0000mm0000000000000000"
         f = format.Format(b)
         self.assertEqual(f.is_valid(), True)
         self.assertEqual(f.message, None)
+
 
     def test_valid_board6(self):
         b = "hmhmhmhmhmhmmhmhmhmhmhmhhmhmhmhmhmhmhmhmhm"

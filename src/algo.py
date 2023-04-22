@@ -1,13 +1,15 @@
 import math
 import time
 
-position_heuristics = [[2, 2, 2, 2, 2, 2],
-                       [3, 4, 5, 5, 4, 3],
-                       [4, 6, 8, 8, 6, 4],
-                       [6, 8, 10, 10, 8, 6],
-                       [4, 6, 8, 8, 6, 4],
-                       [3, 4, 5, 5, 4, 3],
-                       [2, 2, 2, 2, 2, 2]]
+position_heuristics = [
+    [2, 3, 4, 6, 4, 3, 2],
+    [2, 4, 6, 8, 6, 4, 2],
+    [2, 5, 8, 11, 8, 5, 2],
+    [2, 5, 8, 11, 8, 5, 2],
+    [2, 4, 6, 8, 6, 4, 2],
+    [2, 3, 4, 6, 4, 3, 2],
+    [2, 3, 4, 6, 4, 3, 2]
+]
 
 
 def play_move(grid, move, player):
@@ -163,7 +165,7 @@ def minimax(grid, depth, alpha, beta, maximizing_player):
         return min_val, best_move
 
 
-def best_move(grid, max_time):
+def get_best_move(grid, max_time):
     # set the current time to now
     start_time = time.time()
     print("start time: ", start_time)

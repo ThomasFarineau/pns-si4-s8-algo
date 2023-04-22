@@ -11,7 +11,7 @@ class AlgoTest(unittest.TestCase):
         v = verification.Verification(f.formatted_board())
         format.print_board(v.board)
         self.assertEqual(v.is_valid(), True)
-        m = algo.best_move(v.board, 1)
+        m = algo.get_best_move(v.board, 1)
         print(m)
 
     def test_col_1(self):
@@ -21,7 +21,7 @@ class AlgoTest(unittest.TestCase):
         v = verification.Verification(f.formatted_board())
         format.print_board(v.board)
         self.assertEqual(v.is_valid(), True)
-        m = algo.best_move(v.board, 1)
+        m = algo.get_best_move(v.board, 1)
         print(m)
 
 if __name__ == '__main__':
