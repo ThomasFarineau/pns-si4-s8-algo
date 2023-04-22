@@ -1,6 +1,6 @@
 import unittest
 
-from src import verification, algo
+from src import verification, algo, format
 
 
 class AlgoTest(unittest.TestCase):
