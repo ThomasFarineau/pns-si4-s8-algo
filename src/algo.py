@@ -1,14 +1,16 @@
 import math
 import time
 
+secu_margin = 0.5 # to answer safely before max time is reached
+
 position_heuristics = [
-    [2, 3, 4, 6, 4, 3, 2],
-    [2, 4, 6, 8, 6, 4, 2],
-    [2, 5, 8, 11, 8, 5, 2],
-    [2, 5, 8, 11, 8, 5, 2],
-    [2, 4, 6, 8, 6, 4, 2],
-    [2, 3, 4, 6, 4, 3, 2],
-    [2, 3, 4, 6, 4, 3, 2]
+    [2, 3, 4, 6, 4, 3],
+    [2, 4, 6, 8, 6, 4],
+    [2, 5, 8, 11, 8, 5],
+    [2, 5, 8, 11, 8, 5],
+    [2, 4, 6, 8, 6, 4],
+    [2, 3, 4, 6, 4, 3],
+    [2, 3, 4, 6, 4, 3]
 ]
 
 
@@ -168,12 +170,13 @@ def minimax(grid, depth, alpha, beta, maximizing_player):
 def get_best_move(grid, max_time):
     # set the current time to now
     start_time = time.time()
-    print("start time: ", start_time)
     move, final_move = None, None
     depth = 1
-    while time.time() - start_time < max_time and depth <= 42:
+    while time.time() - start_time < (max_time - secu_margin) and depth <= 42:
         final_move = move
         _, move = minimax(grid, depth, -math.inf, math.inf, True)
         depth += 1
+    end_time = time.time()
+    print("Time taken: {:.2f} s".format((end_time - start_time)))
     print("[DEBUG] depth: ", depth)
     return [final_move[0] + 1, final_move[1] + 1]
