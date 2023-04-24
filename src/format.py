@@ -21,25 +21,25 @@ class Format:
     def is_valid(self):
         # On vérifie que le board est bien présent
         if self.board is None:
-            self.message = "Paramètre b manquant"
+            self.message = "Parametre b manquant"
             return False
         # On vérifie que le board est bien une chaîne de caractères de 42 caractères
         if len(self.board) != 42:
-            self.message = "La chaîne de caractères doit contenir 42 caractères, actuellement {} caractères".format(
+            self.message = "La chaine de caracteres doit contenir 42 caracteres, actuellement {} caracteres".format(
                 len(self.board))
             return False
         # On vérifie que le board ne contient que des 0, des m ou des h.
         for c in self.board:
             if c not in ['0', 'm', 'h']:
-                self.message = "La chaîne de caractères ne doit contenir que des 0, des m ou des h"
+                self.message = "La chaine de caracteres ne doit contenir que des 0, des m ou des h"
                 return False
         # On vérifie que le board ne contient pas de 0 avant un m ou un h dans la même colonne
         if not self.valid_placement():
-            self.message = "Il ne peut pas y avoir de 0 avant un m ou un h dans la même colonne"
+            self.message = "Il ne peut pas y avoir de 0 avant un m ou un h dans la meme colonne"
             return False
         # On vérifie que le nombre de H est égal au nombre de M (ou +1 si l’ordinateur commence).
         if not self.valid_count():
-            self.message = "Le nombre de H doit être égal au nombre de M (ou n(M)+1)"
+            self.message = "Le nombre de H doit etre egal au nombre de M (ou n(M)+1)"
             return False
         return True
 

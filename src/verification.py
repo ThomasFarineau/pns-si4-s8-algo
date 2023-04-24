@@ -7,7 +7,7 @@ class Verification:
         # On vérifie que le board ne contient pas de puissance 4.
         e = self.is_ended()
         if e[0]:
-            self.message = "Le plateau contient une puissance 4, le joueur {} a gagné avec {}.".format(e[1], e[2])
+            self.message = "Le plateau contient une puissance 4, le joueur {} a gagne avec {}.".format(e[1], e[2])
             return False
         # On vérifie que la board n’est pas pleine.
         if self.is_full():
